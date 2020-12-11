@@ -7,13 +7,19 @@
 #include <fstream>
 #include <thread>
 
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
 #include "Command.h"
 
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
-#include <WinSock.h>
-#pragma comment(lib, "WS2_32.lib")
+// #define _WINSOCK_DEPRECATED_NO_WARNINGS
+// #include <WinSock.h>
+// #pragma comment(lib, "WS2_32.lib")
 
-void work_with_client(int socketClient)
+void work_with_client(int clientSocket)
 {
     int len = 0;
     char command[1000];
@@ -21,8 +27,8 @@ void work_with_client(int socketClient)
     ModelUser* user = NULL;
     while (true)
     {
-        recv(socketClient, (char*)&len, sizeof(len), 0);
-        recv(socketClient, (char*)&command, len * sizeof(char), 0);
+        read(clientSocket, (char*)&len, sizeof(len));
+        read(clientSocket, (char*)&command, len * sizeof(char));
         command[len] = '\0';
         if (strcmp(command, "exit") == 0)
         {
@@ -39,50 +45,54 @@ void work_with_client(int socketClient)
             com.simpleCommand(user, command);
         }
         len = com.get_answer().length();
-        send(socketClient, (char*)&len, sizeof(len), 0);
-        send(socketClient, com.get_answer().c_str(), len * sizeof(char), 0);
+        write(clientSocket, (char*)&len, sizeof(len));
+        write(clientSocket, com.get_answer().c_str(), len * sizeof(char));
     }
-    closesocket(socketClient);
+    close(clientSocket);
 }
 
 int main()
 {
-    WORD wVersionRequested;
-    WSADATA wsaData;
-    wVersionRequested = MAKEWORD(2, 2);
-    if (WSAStartup(wVersionRequested, &wsaData) == WSAVERNOTSUPPORTED)
-    {
-        std::cerr << "Version is not supported" << std::endl;
-        WSACleanup();
-        return 1;
-    }
+    // WORD wVersionRequested;
+    // WSADATA wsaData;
+    // wVersionRequested = MAKEWORD(2, 2);
+    // if (WSAStartup(wVersionRequested, &wsaData) == WSAVERNOTSUPPORTED)
+    // {
+    //     std::cerr << "Version is not supported" << std::endl;
+    //     WSACleanup();
+    //     return 1;
+    // }
 
-    SOCKET socketServer, socketClient;
-    socketServer = socket(AF_INET, SOCK_STREAM, 0);
+    // SOCKET serverSocket, clientSocket;
+    int serverSocket;
+    int clientSocket;
+    
+    serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 
     sockaddr_in serverAddress, clientAddress;
+
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_addr.s_addr = INADDR_ANY;
     serverAddress.sin_port = htons(1280);
 
-    if (bind(socketServer, (sockaddr*)&serverAddress, sizeof(serverAddress)) < 0)
+    if (bind(serverSocket, (sockaddr*)&serverAddress, sizeof(serverAddress)) < 0)
     {
         std::cerr << "ERROR on binding";
-        WSACleanup();
-        closesocket(socketServer);
+        // WSACleanup();
+        // closesocket(serverSocket);
         return 1;
     }
     const size_t numberUser = 5;
-    listen(socketServer, numberUser);
+    listen(serverSocket, numberUser);
 
-    int lengthAdr = sizeof(clientAddress);
+    socklen_t lengthAdr = sizeof(clientAddress);
 
     int i = 0;
     std::thread threads[numberUser];
     while (i < 5)
     {
-        socketClient = accept(socketServer, (sockaddr*)&clientAddress, &lengthAdr);
-        threads[i] = std::thread(work_with_client, socketClient);
+        clientSocket = accept(serverSocket, (sockaddr*)&clientAddress, &lengthAdr);
+        threads[i] = std::thread(work_with_client, clientSocket);
         ++i;
     }
     for (size_t i = 0; i < numberUser; ++i)
@@ -90,7 +100,7 @@ int main()
         threads[i].join();
     }
 
-    closesocket(socketServer);
+    close(serverSocket);
 
     return 0;
 }
