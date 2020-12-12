@@ -35,15 +35,11 @@ std::string DataFileMessageXML::get_message(const std::string &login)
 
         for (xml_attribute<> *attr = node->first_attribute(); attr; attr = attr->next_attribute())
         {
-            // std::cout << "attr: \"" << attr->value() << "\""<< std::endl;
-            // std::cout << "attr: \"" << text_sender.c_str() << "\"" << std::endl;
             if(strcmp(attr->name(), text_sender.c_str())   == 0)    { sender    = std::string(attr->value()); continue; }
             if(strcmp(attr->name(), text_reciever.c_str()) == 0)    { reciever  = std::string(attr->value()); continue; }
             if(strcmp(attr->name(), text_message.c_str())  == 0)    { message   = std::string(attr->value()); continue; }
         }
 
-        // std::cout << "login: " << login << std::endl;
-        // std::cout << "reciever: " << reciever << std::endl;
 
         if(reciever == login)
         {
@@ -51,8 +47,6 @@ std::string DataFileMessageXML::get_message(const std::string &login)
         }
     }
 
-    // std::cout << "read: " << answer << std::endl;
-    // std::cout << "*********" << std::endl;
 
     mtx.unlock();
     return answer;
@@ -84,9 +78,6 @@ bool DataFileMessageXML::sendMessage(const std::string& login, const std::string
 
     doc.append_node(node);
 
-    // std::cout << "-----\n";
-    // std::cout << doc << std::endl;
-    // std::cout << "-----\n";
 
     write();
     mtx.unlock();
@@ -134,7 +125,6 @@ void DataFileMessageXML::read()
     std::string rawData((std::istreambuf_iterator<char>(t)), 
             std::istreambuf_iterator<char>());
 
-    // std::cout << rawData << std::endl;
 
     t.close();
 
@@ -145,7 +135,6 @@ void DataFileMessageXML::read()
     try{
         const int flags = parse_full;
         doc.parse<flags>(c);
-        // std::cout << doc << std::endl;
     }
     catch (parse_error* x)
     {
@@ -153,7 +142,6 @@ void DataFileMessageXML::read()
     }
     catch(...)
     {
-        ////////
     }
 
     delete[] c;

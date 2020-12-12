@@ -11,22 +11,8 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 
-// #define _WINSOCK_DEPRECATED_NO_WARNINGS
-// #include <WinSock.h>
-// #pragma comment(lib, "WS2_32.lib")
-
 int main(int argc, char *argv[])
 {
-    // WORD wVersionRequested;
-    // WSADATA wsaData;
-    // wVersionRequested = MAKEWORD(2, 2);
-    // if (WSAStartup(wVersionRequested, &wsaData) == WSAVERNOTSUPPORTED)
-    // {
-    //     std::cerr << "Version is not supported" << std::endl;
-    //     WSACleanup();
-    //     return 1;
-    // }
-
     int sockfd,
         n;
     struct sockaddr_in serv_addr;
@@ -36,8 +22,6 @@ int main(int argc, char *argv[])
     if (sockfd < 0)
     {
         std::cerr << "ERROR opening socket";
-        // closesocket(sockfd);
-        // WSACleanup();
         return 1;
     }
 
@@ -49,7 +33,6 @@ int main(int argc, char *argv[])
     {
         std::cerr << "ERROR connecting";
         close(sockfd);
-        // WSACleanup();
         return 1;
     }
 
@@ -59,7 +42,6 @@ int main(int argc, char *argv[])
     while (true)
     {
         std::cout << ">";
-        // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cin.getline(command, 64, '\n');
         if (strcmp(command, "exit") == 0)
         {
@@ -78,9 +60,8 @@ int main(int argc, char *argv[])
             answer[len] = '\0';
             std::cout << answer << std::endl;
         }
-        // delete[]answer;
     }
+
     close(sockfd);
-    // WSACleanup();
     return 0;
 }

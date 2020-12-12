@@ -15,10 +15,6 @@
 
 #include "Command.h"
 
-// #define _WINSOCK_DEPRECATED_NO_WARNINGS
-// #include <WinSock.h>
-// #pragma comment(lib, "WS2_32.lib")
-
 void work_with_client(int clientSocket)
 {
     int len = 0;
@@ -53,17 +49,7 @@ void work_with_client(int clientSocket)
 
 int main(int argc, char *argv[])
 {
-    // WORD wVersionRequested;
-    // WSADATA wsaData;
-    // wVersionRequested = MAKEWORD(2, 2);
-    // if (WSAStartup(wVersionRequested, &wsaData) == WSAVERNOTSUPPORTED)
-    // {
-    //     std::cerr << "Version is not supported" << std::endl;
-    //     WSACleanup();
-    //     return 1;
-    // }
 
-    // SOCKET serverSocket, clientSocket;
     int serverSocket;
     int clientSocket;
     
@@ -78,8 +64,6 @@ int main(int argc, char *argv[])
     if (bind(serverSocket, (sockaddr*)&serverAddress, sizeof(serverAddress)) < 0)
     {
         std::cerr << "ERROR on binding";
-        // WSACleanup();
-        // closesocket(serverSocket);
         return 1;
     }
     const size_t numberUser = 5;
