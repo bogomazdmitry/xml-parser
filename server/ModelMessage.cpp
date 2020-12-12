@@ -12,7 +12,7 @@ std::string ModelMessage::get_loginRecipient() const
 
 std::string ModelMessage::get_message() const
 {
-    return message;
+    return text_message;
 }
 
 void ModelMessage::set_loginAuthor(const std::string& loginAuthor) 
@@ -25,12 +25,12 @@ void ModelMessage::set_loginRecipient(const std::string &loginRecipient)
     this->loginRecipient = loginRecipient;
 }
 
-void ModelMessage::set_message(const std::string& message) 
+void ModelMessage::set_message(const std::string& text_message) 
 {
-    this->message = message;
+    this->text_message = text_message;
 }
 
 std::string ModelMessage::to_string() const
 {
-    return loginAuthor + "->" + loginRecipient + "\n" + "message";
+    return loginAuthor + "->" + loginRecipient + "\n" + "text_message";
 }

@@ -4,7 +4,7 @@
 #include "UserController.h"
 #include "Utils.h"
 #include "DataFileWithUserTXT.h"
-#include "DataFileMessageTXT.h"
+#include "DataFileMessageXML.h"
 
 #include <iostream>
 #include <string>

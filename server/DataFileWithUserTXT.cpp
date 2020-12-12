@@ -1,14 +1,14 @@
 #include "DataFileWithUserTXT.h"
 
 DataFileWithUserTXT::DataFileWithUserTXT() :
-	nameOfFile("user.txt")
+	fileName("user.txt")
 {}
 
 bool DataFileWithUserTXT::WriteUser(ModelUser* user)
 {
 	if (!CheckUser(user->get_login(), user->get_password()))
 	{
-		std::ofstream file(nameOfFile, std::ios::app);
+		std::ofstream file(fileName, std::ios::app);
 		file << user->get_login() << std::endl << user->get_password() << std::endl;
 		file.close();
 		return true;
@@ -19,9 +19,9 @@ bool DataFileWithUserTXT::WriteUser(ModelUser* user)
 	}
 }
 
-ModelUser* DataFileWithUserTXT::GetUser(std::string login) const
+ModelUser* DataFileWithUserTXT::GetUser(std::string login)
 {
-	std::ifstream file(nameOfFile);
+	std::ifstream file(fileName);
 	std::string str;
 	size_t i = 0;
 	while (std::getline(file, str))
@@ -40,7 +40,7 @@ ModelUser* DataFileWithUserTXT::GetUser(std::string login) const
 
 bool DataFileWithUserTXT::CheckUser(std::string login, std::string password)
 {
-	std::ifstream file(nameOfFile);
+	std::ifstream file(fileName);
 	std::string str;
 	size_t i = 0;
 	while (std::getline(file, str))

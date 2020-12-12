@@ -2,7 +2,8 @@
 
 Command::Command() :
     userController(new UserController(new DataFileWithUserTXT())),
-    messageController(new MessageController(new DataFileMessageTXT())){}
+    messageController(new MessageController(DataFileMessageXML::getInstance())){}
+    // messageController(new MessageController( new DataFileWithUserTXT() )){}
 
 void Command::simpleCommand(ModelUser*& user, const std::string& command)
 {
@@ -11,8 +12,8 @@ void Command::simpleCommand(ModelUser*& user, const std::string& command)
     if (k == "send")
     {
         auto recipient = Utils::get_firstWord(command, startCommand);
-        auto message = command.substr(startCommand);
-        if (messageController->sendMessage(user, recipient, message))
+        auto text_message = command.substr(startCommand);
+        if (messageController->sendMessage(user, recipient, text_message))
         {
             answer = "Send successfull";
         }
@@ -68,7 +69,7 @@ void Command::simpleCommand(ModelUser*& user, const std::string& command)
         answer = messageController->showMessage(user);
         if (answer.empty())
         {
-            answer = "You don't have any message";
+            answer = "You don't have any text_message";
         }
         return;
     }
@@ -109,12 +110,12 @@ ModelUser* Command::loginCommand(const std::string& command)
             return NULL;
         }
     }
-    if (k == "registr")
+    if (k == "register")
     {
         auto user = userController->Registr(login, password);
         if (user != NULL)
         {
-            answer = "Successfull registr";
+            answer = "Successfull register";
             return user;
         }
         else

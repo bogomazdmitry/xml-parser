@@ -5,9 +5,9 @@ MessageController::MessageController(IDataFileMessage* dfm) :
 {
 }
 
-bool MessageController::sendMessage(const ModelUser* const user, const std::string& recipient, const std::string& message)
+bool MessageController::sendMessage(const ModelUser* const user, const std::string& recipient, const std::string& text_message)
 {
-    return dfm->sendMessage(user->get_login(), recipient, message);
+    return dfm->sendMessage(user->get_login(), recipient, text_message);
 }
 
 bool MessageController::deleteMessage(const ModelUser* const user, int begin, int end)

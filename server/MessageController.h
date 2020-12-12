@@ -16,7 +16,7 @@ private:
 public:
     MessageController(IDataFileMessage* dfm);
 
-    bool sendMessage(const ModelUser* const user, const std::string& recipient, const std::string& message);
+    bool sendMessage(const ModelUser* const user, const std::string& recipient, const std::string& text_message);
 
     bool deleteMessage(const ModelUser* const user, int begin = 1, int end = -1);
 

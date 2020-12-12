@@ -1,14 +1,14 @@
 #include "DataFileMessageTXT.h"
 
 DataFileMessageTXT::DataFileMessageTXT() :
-	nameOfFile("message.txt")
+	fileName("text_message.txt")
 {
 }
 
 std::string DataFileMessageTXT::get_message(const std::string& login) const
 {
 	std::string result = "";
-	std::ifstream file(nameOfFile);
+	std::ifstream file(fileName);
 	std::string str;
 	std::string str_prev;
 	size_t i = 0;
@@ -28,17 +28,17 @@ std::string DataFileMessageTXT::get_message(const std::string& login) const
 	return result;
 }
 
-bool DataFileMessageTXT::sendMessage(const std::string& login, const std::string& loginEnd, const std::string& message)
+bool DataFileMessageTXT::sendMessage(const std::string& login, const std::string& loginEnd, const std::string& text_message)
 {
-	std::ofstream file(nameOfFile, std::ios::app);
-	file << login << std::endl << loginEnd << std::endl << message << std::endl;
+	std::ofstream file(fileName, std::ios::app);
+	file << login << std::endl << loginEnd << std::endl << text_message << std::endl;
 	file.close();
 	return true;
 }
 
 bool DataFileMessageTXT::deleteMessage(const std::string& login, int begin, int end)
 {
-	std::ifstream file(nameOfFile);
+	std::ifstream file(fileName);
 	std::string result = "";
 	std::string str;
 	std::string str_prev = "";
@@ -66,7 +66,7 @@ bool DataFileMessageTXT::deleteMessage(const std::string& login, int begin, int 
 	}
 	result += str_prev + "\n";
 	file.close();
-	std::ofstream fileO(nameOfFile);
+	std::ofstream fileO(fileName);
 	fileO << result;
 	fileO.close();
 	return false;

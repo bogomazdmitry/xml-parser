@@ -51,7 +51,7 @@ void work_with_client(int clientSocket)
     close(clientSocket);
 }
 
-int main()
+int main(int argc, char *argv[])
 {
     // WORD wVersionRequested;
     // WSADATA wsaData;
@@ -73,7 +73,7 @@ int main()
 
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_addr.s_addr = INADDR_ANY;
-    serverAddress.sin_port = htons(1280);
+    serverAddress.sin_port = htons(atoi(argv[1]));
 
     if (bind(serverSocket, (sockaddr*)&serverAddress, sizeof(serverAddress)) < 0)
     {

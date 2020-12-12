@@ -15,7 +15,7 @@
 // #include <WinSock.h>
 // #pragma comment(lib, "WS2_32.lib")
 
-int main()
+int main(int argc, char *argv[])
 {
     // WORD wVersionRequested;
     // WSADATA wsaData;
@@ -27,7 +27,8 @@ int main()
     //     return 1;
     // }
 
-    int sockfd, n;
+    int sockfd,
+        n;
     struct sockaddr_in serv_addr;
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -41,7 +42,7 @@ int main()
     }
 
     serv_addr.sin_family        = AF_INET;
-    serv_addr.sin_port          = htons(1280);
+    serv_addr.sin_port          = htons(atoi(argv[1]));
     serv_addr.sin_addr.s_addr   = inet_addr("127.0.0.1");
 
     if (connect(sockfd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0)
